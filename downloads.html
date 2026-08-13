@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Materiais · SILTEC 2ª Edição</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .file{
+    display:flex; align-items:center; gap:14px;
+    padding:18px; border-radius:14px;
+    background:var(--paper); border:1px solid var(--line);
+    text-decoration:none; color:var(--ink);
+    margin-bottom:12px;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .file:active{ transform:scale(0.98); }
+  .file:hover{ box-shadow:0 8px 20px -12px rgba(22,60,42,0.35); }
+  .file .icon{
+    flex-shrink:0; width:42px; height:42px; border-radius:10px;
+    background:rgba(234,106,46,0.14); color:var(--orange);
+    display:flex; align-items:center; justify-content:center;
+    font-weight:800; font-size:11.5px;
+  }
+  .file .meta{ flex:1; min-width:0; }
+  .file .meta .name{ font-weight:700; font-size:15px; }
+  .file .meta .desc{ font-size:13px; color:rgba(27,33,25,0.58); margin-top:2px; }
+  .file .dl{ font-size:18px; color:var(--green-deep); flex-shrink:0; }
+  .empty{
+    text-align:center; padding:44px 20px;
+    border:1.5px dashed var(--line); border-radius:14px;
+    color:rgba(27,33,25,0.55); font-size:14.5px; line-height:1.6;
+    background:var(--paper);
+  }
+  .page-title{ text-align:center; margin-bottom:28px; }
+  .page-title h2{
+    font-family:'Baloo 2', sans-serif; font-weight:700;
+    font-size:clamp(24px,6vw,30px); color:var(--green-deep); margin:0 0 6px;
+  }
+  .page-title p{ font-size:14.5px; color:rgba(27,33,25,0.62); margin:0; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <a class="back" href="index.html">← Voltar</a>
+    <div class="mini-brand">
+      <img src="logosiltec.jpg" alt="SILTEC 2ª Edição" class="mini-logo">
+    </div>
+
+    <div class="page-title">
+      <h2>Baixe os arquivos da palestra</h2>
+      <p>Slides e documentos apresentados hoje.</p>
+    </div>
+
+    <!-- ======================================================
+         EDITE A LISTA ABAIXO: adicione um bloco <a class="file">
+         para cada PDF, apontando para o arquivo dentro da pasta
+         /materiais (ex: materiais/slides.pdf).
+    ======================================================= -->
+
+    <div id="fileList">
+      <!-- Exemplo (remova o comentário e ajuste ao subir os PDFs):
+      <a class="file" href="materiais/slides-palestra.pdf" download>
+        <div class="icon">PDF</div>
+        <div class="meta">
+          <div class="name">Slides da palestra</div>
+          <div class="desc">Apresentação completa · PDF</div>
+        </div>
+        <div class="dl">↓</div>
+      </a>
+      -->
+    </div>
+
+    <div class="empty" id="emptyMsg">
+      Os materiais serão disponibilizados aqui durante o evento.<br>Volte em instantes.
+    </div>
+  </div>
+
+  <script>
+    const list = document.getElementById('fileList');
+    const empty = document.getElementById('emptyMsg');
+    if (list.querySelectorAll('.file').length > 0) empty.style.display = 'none';
+  </script>
+</body>
+</html>

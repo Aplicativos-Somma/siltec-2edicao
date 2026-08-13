@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Perguntas · SILTEC 2ª Edição</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .page-title{ text-align:center; margin-bottom:26px; }
+  .page-title h2{
+    font-family:'Baloo 2', sans-serif; font-weight:700;
+    font-size:clamp(24px,6vw,30px); color:var(--green-deep); margin:0 0 6px;
+  }
+  .page-title p{ font-size:14.5px; color:rgba(27,33,25,0.62); margin:0; line-height:1.5; }
+
+  form{ display:flex; flex-direction:column; gap:16px; }
+  label{ font-size:13px; font-weight:700; color:var(--green-deep); margin-bottom:6px; display:block; }
+  input, textarea{
+    width:100%; font-family:'Public Sans', sans-serif; font-size:16px;
+    padding:14px 16px; border-radius:12px; border:1.5px solid var(--line);
+    background:var(--paper); color:var(--ink); resize:none;
+  }
+  input:focus, textarea:focus{
+    outline:none; border-color:var(--green-mid);
+    box-shadow:0 0 0 3px rgba(46,125,70,0.15);
+  }
+  textarea{ min-height:120px; }
+
+  button{
+    margin-top:6px; width:100%; padding:18px 24px; border:none; border-radius:14px;
+    background:var(--green-deep); color:var(--cream);
+    font-family:'Public Sans', sans-serif; font-weight:700; font-size:16.5px;
+    cursor:pointer; box-shadow:0 10px 22px -10px rgba(22,60,42,0.55);
+    transition:transform .15s ease, background .15s ease, opacity .15s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  button:active{ transform:scale(0.98); }
+  button:disabled{ opacity:0.6; cursor:default; }
+
+  .state{ display:none; text-align:center; padding:36px 20px; }
+  .state.show{ display:block; }
+  .state .dot{
+    width:54px; height:54px; border-radius:50%;
+    background:rgba(234,106,46,0.14); color:var(--orange);
+    display:flex; align-items:center; justify-content:center;
+    font-size:24px; margin:0 auto 18px; font-weight:800;
+  }
+  .state h2{
+    font-family:'Baloo 2', sans-serif; font-weight:700; font-size:22px;
+    color:var(--green-deep); margin:0 0 8px;
+  }
+  .state p{ font-size:14.5px; color:rgba(27,33,25,0.6); margin:0 0 22px; }
+  .state a{
+    display:inline-block; font-size:14px; font-weight:700; color:var(--green-deep);
+    text-decoration:none; border-bottom:1.5px solid var(--green-deep); padding-bottom:2px;
+  }
+  .err{ font-size:13.5px; color:#a3402c; margin-top:2px; display:none; }
+  .err.show{ display:block; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <a class="back" href="index.html">← Voltar</a>
+    <div class="mini-brand">
+      <img src="logosiltec.jpg" alt="SILTEC 2ª Edição" class="mini-logo">
+    </div>
+
+    <div id="formState">
+      <div class="page-title">
+        <h2>Envie sua pergunta</h2>
+        <p>Sua dúvida vai direto para o palestrante. Pode enviar quantas quiser.</p>
+      </div>
+
+      <form id="qForm">
+        <div>
+          <label for="nome">Seu nome</label>
+          <input type="text" id="nome" name="nome" placeholder="Como podemos te chamar" required>
+        </div>
+        <div>
+          <label for="pergunta">Sua pergunta</label>
+          <textarea id="pergunta" name="pergunta" placeholder="Escreva sua pergunta aqui" required></textarea>
+        </div>
+        <p class="err" id="errMsg">Não foi possível enviar. Verifique sua conexão e tente de novo.</p>
+        <button type="submit" id="submitBtn">Enviar pergunta</button>
+      </form>
+    </div>
+
+    <div class="state" id="successState">
+      <div class="dot">✓</div>
+      <h2>Pergunta enviada</h2>
+      <p>Obrigado! O palestrante vai receber sua pergunta.</p>
+      <a href="#" id="sendAnother">Enviar outra pergunta</a>
+    </div>
+  </div>
+
+  <script>
+    // ======================================================
+    // COLE AQUI a URL do seu Web App do Google Apps Script
+    // ======================================================
+    const SCRIPT_URL = "COLE_AQUI_A_URL_DO_APPS_SCRIPT";
+
+    const form = document.getElementById('qForm');
+    const btn = document.getElementById('submitBtn');
+    const errMsg = document.getElementById('errMsg');
+    const formState = document.getElementById('formState');
+    const successState = document.getElementById('successState');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errMsg.classList.remove('show');
+      btn.disabled = true;
+      btn.textContent = 'Enviando…';
+
+      const nome = document.getElementById('nome').value.trim();
+      const pergunta = document.getElementById('pergunta').value.trim();
+
+      try {
+        if (SCRIPT_URL.includes('COLE_AQUI')) {
+          throw new Error('SCRIPT_URL não configurada');
+        }
+        await fetch(SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain' },
+          body: JSON.stringify({ nome, pergunta, pagina: 'siltec-2edicao' })
+        });
+        form.reset();
+        formState.style.display = 'none';
+        successState.classList.add('show');
+      } catch (err) {
+        errMsg.classList.add('show');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Enviar pergunta';
+      }
+    });
+
+    document.getElementById('sendAnother').addEventListener('click', (e) => {
+      e.preventDefault();
+      successState.classList.remove('show');
+      formState.style.display = 'block';
+    });
+  </script>
+</body>
+</html>
